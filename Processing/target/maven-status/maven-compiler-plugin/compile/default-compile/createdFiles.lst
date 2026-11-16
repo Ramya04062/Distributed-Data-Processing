@@ -1,0 +1,12 @@
+com\dataprocessor\repository\InputRecordRepository.class
+com\dataprocessor\entity\InputRecord.class
+com\dataprocessor\entity\ProcessedRecord.class
+com\dataprocessor\service\MasterService.class
+com\dataprocessor\controller\JobController.class
+com\dataprocessor\enums\ChunkStatus.class
+com\dataprocessor\service\WorkerManager.class
+com\dataprocessor\repository\WorkChunkRepository.class
+com\dataprocessor\repository\ProcessedRecordRepository.class
+com\dataprocessor\FaultTolerantApplication.class
+com\dataprocessor\entity\WorkChunk.class
+com\dataprocessor\enums\WorkerState.class

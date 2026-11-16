@@ -1,0 +1,12 @@
+C:\Users\Ramya K\OneDrive\Desktop\Processing\src\main\java\com\dataprocessor\controller\JobController.java
+C:\Users\Ramya K\OneDrive\Desktop\Processing\src\main\java\com\dataprocessor\entity\InputRecord.java
+C:\Users\Ramya K\OneDrive\Desktop\Processing\src\main\java\com\dataprocessor\entity\ProcessedRecord.java
+C:\Users\Ramya K\OneDrive\Desktop\Processing\src\main\java\com\dataprocessor\entity\WorkChunk.java
+C:\Users\Ramya K\OneDrive\Desktop\Processing\src\main\java\com\dataprocessor\enums\ChunkStatus.java
+C:\Users\Ramya K\OneDrive\Desktop\Processing\src\main\java\com\dataprocessor\enums\WorkerState.java
+C:\Users\Ramya K\OneDrive\Desktop\Processing\src\main\java\com\dataprocessor\FaultTolerantApplication.java
+C:\Users\Ramya K\OneDrive\Desktop\Processing\src\main\java\com\dataprocessor\repository\InputRecordRepository.java
+C:\Users\Ramya K\OneDrive\Desktop\Processing\src\main\java\com\dataprocessor\repository\ProcessedRecordRepository.java
+C:\Users\Ramya K\OneDrive\Desktop\Processing\src\main\java\com\dataprocessor\repository\WorkChunkRepository.java
+C:\Users\Ramya K\OneDrive\Desktop\Processing\src\main\java\com\dataprocessor\service\MasterService.java
+C:\Users\Ramya K\OneDrive\Desktop\Processing\src\main\java\com\dataprocessor\service\WorkerManager.java
