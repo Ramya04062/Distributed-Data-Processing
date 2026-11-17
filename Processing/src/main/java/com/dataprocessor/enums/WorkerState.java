@@ -2,7 +2,7 @@ package com.dataprocessor.enums;
 
 public enum WorkerState {
     IDLE,
-    RUNNING,
+    BUSY,
     SLOW,
     FAILED,
     COMPLETED

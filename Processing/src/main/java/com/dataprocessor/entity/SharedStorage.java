@@ -13,8 +13,7 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "work_chunks")
-public class WorkChunk {
+public class SharedStorage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +31,7 @@ public class WorkChunk {
     @Column(name = "offset", nullable = false)
     private Long offset;
 
-    @Column(name = "fencing_token", nullable = false)
+    @Column(name = "fencing_token")
     private Long fencingToken;
 
     @Column(name = "lease_expiry")
@@ -45,12 +44,12 @@ public class WorkChunk {
     @Column(name = "status", nullable = false)
     private ChunkStatus status;
 
-    public WorkChunk() {
+    public SharedStorage() {
     }
 
-    public WorkChunk(String workerId, Long rangeStart, Long rangeEnd, 
-                     Long offset, Long fencingToken, LocalDateTime leaseExpiry, 
-                     LocalDateTime heartbeat, ChunkStatus status) {
+    public SharedStorage(String workerId, Long rangeStart, Long rangeEnd,
+                         Long offset, Long fencingToken, LocalDateTime leaseExpiry,
+                         LocalDateTime heartbeat, ChunkStatus status) {
         this.workerId = workerId;
         this.rangeStart = rangeStart;
         this.rangeEnd = rangeEnd;

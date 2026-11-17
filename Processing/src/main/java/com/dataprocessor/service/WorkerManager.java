@@ -1,12 +1,16 @@
+
 package com.dataprocessor.service;
 
 import com.dataprocessor.enums.WorkerState;
 import jakarta.annotation.PreDestroy;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -16,62 +20,68 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 public class WorkerManager {
 
-    public static final List<String> WORKER_IDS = List.of("worker-1", "worker-2", "worker-3", "worker-4");
-
     private final ThreadPoolExecutor executorService;
-    private final Map<String, WorkerState> workerStates = new ConcurrentHashMap<>();
-    private final Map<String, Boolean> failureFlags = new ConcurrentHashMap<>();
-    private final Map<String, Boolean> slowFlags = new ConcurrentHashMap<>();
 
-    public WorkerManager() {
-        for (String id : WORKER_IDS) {
-            workerStates.put(id, WorkerState.IDLE);
-            failureFlags.put(id, false);
-            slowFlags.put(id, false);
-        }
+    private final Map<String, WorkerState> workerStates =
+            new ConcurrentHashMap<>();
 
+    public WorkerManager(
+            @Value("${app.worker.pool-size:4}") int poolSize) {
+
+        // Generate thread names
         AtomicInteger threadIndex = new AtomicInteger(1);
-        ThreadFactory customThreadFactory = runnable -> {
-            int index = threadIndex.getAndIncrement();
-            String name = (index <= 4) ? "worker-" + index : "worker-extra-" + index;
-            Thread thread = new Thread(runnable, name);
+
+        ThreadFactory threadFactory = runnable -> {
+
+            String workerId =
+                    "data-worker-" + threadIndex.getAndIncrement();
+
+            Thread thread = new Thread(runnable, workerId);
+
             thread.setDaemon(false);
+
+            // Register the actual Java thread name and initial state
+            workerStates.put(workerId, WorkerState.IDLE);
+
             return thread;
         };
 
+        // Create fixed thread pool
         this.executorService = new ThreadPoolExecutor(
-                4,
-                4,
+                poolSize,
+                poolSize,
                 0L,
                 TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<>(),
-                customThreadFactory
+                threadFactory
         );
+
+        // Start all core threads
         this.executorService.prestartAllCoreThreads();
     }
 
+    // Get all currently idle workers
+    public List<String> getIdleWorkers() {
 
+        List<String> idleWorkers = new ArrayList<>();
+
+        workerStates.forEach((workerId, state) -> {
+            if (state == WorkerState.IDLE) {
+                idleWorkers.add(workerId);
+            }
+        });
+
+        return idleWorkers;
+    }
+
+    // Update worker runtime state
+    public void updateWorkerState(String workerId, WorkerState state) {
+        workerStates.put(workerId, state);
+    }
+
+    // Get all worker states
     public Map<String, WorkerState> getAllWorkerStates() {
         return Map.copyOf(workerStates);
-    }
-
-    public Map<String, String> getLiveThreadDetails() {
-        Map<String, String> threadStatus = new ConcurrentHashMap<>();
-        for (Thread t : Thread.getAllStackTraces().keySet()) {
-            if (t.getName().startsWith("worker-")) {
-                threadStatus.put(t.getName(), t.getState().toString() + " (isAlive=" + t.isAlive() + ")");
-            }
-        }
-        return threadStatus;
-    }
-
-
-    public void resetWorkers() {
-        for (String id : WORKER_IDS) {
-            workerStates.put(id, WorkerState.IDLE);
-            failureFlags.put(id, false);
-            slowFlags.put(id, false);
-        }
     }
 
 }
